@@ -5,8 +5,8 @@ class PlexUser(object):
                  nickname,
                  moderator,
                  admin):
-        self.user_id = user_id
-        self.discord_id = discord_id
-        self.nickname = nickname
-        self.moderator = moderator
-        self.admin = admin
+        self.user_id: int = user_id
+        self.discord_id: int = discord_id
+        self.nickname: str = nickname
+        self.moderator: bool = moderator
+        self.admin: bool = admin

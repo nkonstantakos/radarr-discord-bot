@@ -2,6 +2,7 @@ from Application.Dao.Movies import MovieTable
 from Application.Dao.PlexUsers import PlexUserTable
 from Application.Dao.PlexUsers import PlexUserRetrievals
 from Application.Domain.Movie import Movie
+from Application.Domain.PlexUser import PlexUser
 import sqlite3
 
 
@@ -17,10 +18,16 @@ class MovieBotDao(object):
         PlexUserTable.create_user_table(connection)
         commit_and_close(connection)
 
-    def insert_movie(self, movie):
+    def insert_movie(self, movie, user):
         """
         @type movie: Movie
+        @type user: PlexUser
         """
+        # Get all users
+        # See if exists
+        # If not, add them
+        # Construct movie object
+        # Default to approved if admin or mod
 
     def get_db_connection(self):
         return sqlite3.connect(self.db_name)

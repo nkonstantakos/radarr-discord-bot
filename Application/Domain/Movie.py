@@ -8,11 +8,11 @@ class Movie(object):
                  declined,
                  deleted,
                  private):
-        self.movie_id = movie_id
-        self.imdb_id = imdb_id
-        self.movie_name = movie_name
-        self.creator = creator
-        self.approved = approved
-        self.declined = declined
-        self.deleted = deleted
-        self.private = private
+        self.movie_id: int = movie_id
+        self.imdb_id: str = imdb_id
+        self.movie_name: str = movie_name
+        self.creator: int = creator
+        self.approved: bool = approved
+        self.declined: bool = declined
+        self.deleted: bool = deleted
+        self.private: bool = private
