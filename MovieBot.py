@@ -1,17 +1,17 @@
 import discord
 import configparser
-from Application.Bot import BotManager
+from Application.Bot.BotManager import BotManager
 
 
 config = configparser.ConfigParser()
 config.read('properties.ini')
 bot = discord.Client()
-manager: BotManager = BotManager(bot, config)
+manager = BotManager(bot, config)
 
 
 def run():
     global config
-    bot.run(config['DISCORD']['botKey'])
+    # bot.run(config['DISCORD']['botKey'])
 
 
 @bot.event
@@ -20,7 +20,6 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.get_channel(int(config['DISCORD']['homeChannelId'])).send('Just woke up!')
 
 
 @bot.event

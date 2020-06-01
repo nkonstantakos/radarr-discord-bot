@@ -1,20 +1,23 @@
-from Application.Api import MovieManager
+from Application.Api.MovieManager import MovieManager
+from Application.Dao.MovieBotDao import MovieBotDao
 
 
 class BotManager(object):
     def __init__(self, bot, config):
         self.bot = bot
-        self.manager = MovieManager(config)
+        self.movie_manager = MovieManager(config)
+        self.dao = MovieBotDao(config['APPLICATION']['dbName'])
+        self.dao.create_tables()
 
     def process_message(self, message):
         """
         @type message: discord.Message
         """
         if message.content.startswith("!addMovie"):
-            self.manager.add_movie(message)
+            self.movie_manager.add_movie(message)
         elif message.content.startswith("!approveMovie"):
-            self.manager.approve_movie(message)
+            self.movie_manager.approve_movie(message)
         elif message.content.startswith("!approveAllMovies"):
-            self.manager.approve_movie(message)
+            self.movie_manager.approve_movie(message)
         elif message.content.startswith("!removeMovie"):
-            self.manager.remove_move(message)
+            self.movie_manager.remove_move(message)
