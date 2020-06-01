@@ -2,7 +2,8 @@ class Movie(object):
     def __init__(self,
                  movie_id,
                  imdb_id,
-                 name,
+                 movie_name,
+                 creator,
                  upvotes,
                  downvotes,
                  approved,
@@ -10,7 +11,8 @@ class Movie(object):
                  deleted):
         self.movie_id = movie_id
         self.imdb_id = imdb_id
-        self.name = name
+        self.movie_name = movie_name
+        self.creator = creator
         self.upvotes = upvotes
         self.downvotes = downvotes
         self.approved = approved

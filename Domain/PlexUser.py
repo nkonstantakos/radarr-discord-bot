@@ -1,4 +1,4 @@
-class User(object):
+class PlexUser(object):
     def __init__(self,
                  user_id,
                  discord_id,
