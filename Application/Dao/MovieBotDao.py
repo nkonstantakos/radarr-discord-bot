@@ -1,8 +1,11 @@
 from Application.Dao.Movies import MovieTable
+from Application.Dao.Movies import MovieUpserts
 from Application.Dao.PlexUsers import PlexUserTable
 from Application.Dao.Votes import VoteTable
 from Application.Domain.Movie import Movie
 from Application.Domain.PlexUser import PlexUser
+from Application.Dao.PlexUsers import PlexUserRetrievals
+from Application.Dao.PlexUsers import PlexUserUpserts
 import sqlite3
 
 
@@ -20,16 +23,31 @@ class MovieBotDao(object):
         VoteTable.create_vote_table(connection)
         commit_and_close(connection)
 
+    def get_all_users(self):
+        connection = self.get_db_connection()
+        existing_users = PlexUserRetrievals.get_users(connection)
+        commit_and_close()
+        return existing_users
+
     def insert_movie(self, movie, user):
         """
         @type movie: Movie
         @type user: PlexUser
         """
-        # Get all users
-        # See if exists
-        # If not, add them
-        # Construct movie object
-        # Default to approved if admin or mod
+        connection = self.get_db_connection()
+        existing_users = PlexUserRetrievals.get_users()
+        user_record = None
+        for existing_user in existing_users:
+            if user.discord_id == existing_user.discord_id:
+                user_record = existing_user
+
+        if user_record is None:
+            PlexUserUpserts.insert_user(connection, user)
+            # user_record = get_user_by_discord_id
+
+        movie.creator = user_record.user_id
+        MovieUpserts.insert_movie(connection, movie)
+        commit_and_close(connection)
 
     def get_db_connection(self):
         return sqlite3.connect(self.db_name)
