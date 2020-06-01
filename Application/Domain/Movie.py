@@ -4,17 +4,15 @@ class Movie(object):
                  imdb_id,
                  movie_name,
                  creator,
-                 upvotes,
-                 downvotes,
                  approved,
                  declined,
-                 deleted):
+                 deleted,
+                 private):
         self.movie_id = movie_id
         self.imdb_id = imdb_id
         self.movie_name = movie_name
         self.creator = creator
-        self.upvotes = upvotes
-        self.downvotes = downvotes
         self.approved = approved
         self.declined = declined
         self.deleted = deleted
+        self.private = private

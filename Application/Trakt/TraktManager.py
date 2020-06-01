@@ -1,7 +1,7 @@
 from trakt import Trakt
 import configparser
 import logging
-from Trakt.Auth import TraktAuthenticator
+from Application.Trakt.Auth import TraktAuthenticator
 
 
 class TraktManager(object):

@@ -1,30 +1,17 @@
 import discord
-import sys
 import configparser
-from trakt import Trakt
+from Application.Bot import BotManager
 
 
 config = configparser.ConfigParser()
 config.read('properties.ini')
 bot = discord.Client()
-
-Trakt.configuration.defaults.client(
-    id=config['TRAKT']['clientId'],
-    secret=config['TRAKT']['clientSecret']
-)
+manager: BotManager = BotManager(bot, config)
 
 
-def run(args):
+def run():
     global config
-    # bot.run(config['DISCORD']['botKey'])
-
-
-def addMovie(message):
-    """
-    @type message: discord.Message
-    """
-
-
+    bot.run(config['DISCORD']['botKey'])
 
 
 @bot.event
@@ -33,7 +20,7 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    await bot.get_channel(int(config['DISCORD']['channelId'])).send('Welp, hopefully I did something')
+    await bot.get_channel(int(config['DISCORD']['homeChannelId'])).send('Just woke up!')
 
 
 @bot.event
@@ -41,18 +28,11 @@ async def on_message(message):
     """
     @type message: discord.Message
     """
-
+    global manager
     if str(message.author) == bot.user:
         return
     elif message.content.startswith("!"):
-        if message.content.startswith("!addMovie"):
-            addMovie(message)
-        elif message.content.startswith("!approveMovie"):
-            approveMovie()
-        elif message.content.startswith("!addMovie"):
-            approveAllMovies()
-        elif message.content.startswith("!removeMovie"):
-            removeMovie()
+        manager.process_message(message)
 
 if __name__ == "__main__":
-    run(sys.argv[1:])
+    run()
