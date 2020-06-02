@@ -3,7 +3,6 @@ from Application.Dao.Movies import MovieUpserts
 from Application.Dao.PlexUsers import PlexUserTable
 from Application.Dao.Votes import VoteTable
 from Application.Domain.Movie import Movie
-from Application.Domain.PlexUser import PlexUser
 from Application.Dao.PlexUsers import PlexUserRetrievals
 from Application.Dao.PlexUsers import PlexUserUpserts
 import sqlite3
@@ -42,11 +41,7 @@ class MovieBotDao(object):
             return user[0]
         return None
 
-    def insert_movie(self, movie):
-        """
-        @type movie: Movie
-        @type user: PlexUser
-        """
+    def insert_movie(self, movie: Movie):
         connection = self.get_db_connection()
         MovieUpserts.insert_movie(connection, movie)
         commit_and_close(connection)

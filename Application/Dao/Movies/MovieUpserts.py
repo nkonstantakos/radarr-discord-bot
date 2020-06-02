@@ -8,7 +8,7 @@ def insert_movie(connection, movie):
     @type movie: Movie
     """
     connection.execute('INSERT INTO MOVIES (imdb_id, movie_name, creator, approved, declined, deleted, private)'
-                       'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                       'VALUES (?, ?, ?, ?, ?, ?, ?)',
                        (movie.imdb_id,
                         movie.movie_name,
                         movie.creator,

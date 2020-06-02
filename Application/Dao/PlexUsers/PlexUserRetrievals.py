@@ -1,5 +1,6 @@
 from Application.Domain.PlexUser import PlexUser
 from sqlite3 import Connection
+from sqlite3 import Cursor
 
 
 def get_users(connection):
@@ -12,10 +13,7 @@ def get_users(connection):
     return get_records_as_users(cursor)
 
 
-def get_user_by_discord_id(connection, discord_id):
-    """
-    @type connection: Connection
-    """
+def get_user_by_discord_id(connection: Connection, discord_id: int):
     cursor = connection.cursor()
     cursor.execute('''SELECT *
                       FROM PLEX_USERS
@@ -23,10 +21,7 @@ def get_user_by_discord_id(connection, discord_id):
     return get_records_as_users(cursor)
 
 
-def get_admin_users(connection):
-    """
-    @type connection: Connection
-    """
+def get_admin_users(connection: Connection):
     cursor = connection.cursor()
     cursor.execute('''SELECT *
                       FROM PLEX_USERS
@@ -34,10 +29,7 @@ def get_admin_users(connection):
     return get_records_as_users(cursor)
 
 
-def get_moderator_users(connection):
-    """
-    @type connection: Connection
-    """
+def get_moderator_users(connection: Connection):
     cursor = connection.cursor()
     cursor.execute('''SELECT *
                       FROM PLEX_USERS
@@ -45,10 +37,7 @@ def get_moderator_users(connection):
     return get_records_as_users(cursor)
 
 
-def get_records_as_users(cursor):
-    """
-    @type cursor: Cursor
-    """
+def get_records_as_users(cursor: Cursor):
     result = cursor.fetchall()
     items = []
     for row in result:
