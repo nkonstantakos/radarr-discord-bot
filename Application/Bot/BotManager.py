@@ -1,5 +1,4 @@
 from Application.Api.MovieManager import MovieManager
-from Application.Dao.MovieBotDao import MovieBotDao
 from Application.Bot.Commands.AddCommand import AddCommand
 from Application.Bot.Commands.ApproveCommand import ApproveCommand
 from Application.Bot.Commands.AuthenticateCommand import AuthenticateCommand
@@ -17,8 +16,6 @@ class BotManager(object):
         """
         self.bot = bot
         self.movie_manager = MovieManager(config)
-        self.dao = MovieBotDao(config['APPLICATION']['dbName'])
-        self.dao.create_tables()
         self.addCommand = AddCommand(self.bot, self.movie_manager)
         self.approveCommand = ApproveCommand(self.bot, self.movie_manager)
         self.authenticateCommand = AuthenticateCommand(self.bot, self.movie_manager)

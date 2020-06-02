@@ -29,23 +29,25 @@ class MovieBotDao(object):
         commit_and_close()
         return existing_users
 
-    def insert_movie(self, movie, user):
+    def insert_user(self, user):
+        connection = self.get_db_connection()
+        PlexUserUpserts.insert_user(connection, user)
+        commit_and_close(connection)
+        return self.get_user_by_discord_id(user.discord_id)
+
+    def get_user_by_discord_id(self, discord_id):
+        connection = self.get_db_connection()
+        user = PlexUserRetrievals.get_user_by_discord_id(connection, discord_id)
+        if len(user) > 0:
+            return user[0]
+        return None
+
+    def insert_movie(self, movie):
         """
         @type movie: Movie
         @type user: PlexUser
         """
         connection = self.get_db_connection()
-        existing_users = PlexUserRetrievals.get_users()
-        user_record = None
-        for existing_user in existing_users:
-            if user.discord_id == existing_user.discord_id:
-                user_record = existing_user
-
-        if user_record is None:
-            PlexUserUpserts.insert_user(connection, user)
-            # user_record = get_user_by_discord_id
-
-        movie.creator = user_record.user_id
         MovieUpserts.insert_movie(connection, movie)
         commit_and_close(connection)
 

@@ -11,7 +11,7 @@ manager = BotManager(bot, config)
 
 def run():
     global config
-    # bot.run(config['DISCORD']['botKey'])
+    bot.run(config['DISCORD']['botKey'])
 
 
 @bot.event

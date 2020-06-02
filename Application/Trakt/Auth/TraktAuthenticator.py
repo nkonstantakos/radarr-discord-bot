@@ -5,9 +5,9 @@ import six
 
 
 class TraktAuthenticator(object):
-    def __init__(self):
-        self.config = configparser.ConfigParser()
-        self.config.read('properties.ini')
+    def __init__(self, config):
+        self.config = config
+        self.authorization = None
 
         Trakt.configuration.defaults.client(
             id=self.config['TRAKT']['clientId'],
@@ -15,11 +15,8 @@ class TraktAuthenticator(object):
         )
 
     def authenticate(self):
-        authorization = self.config['TRAKT']['authentication']
-        print(authorization)
-
-        if authorization:
-            return json.loads(authorization)
+        if self.authorization:
+            return json.loads(self.authorization)
 
         auth_url = self.config['TRAKT']['authUrl']
         print('Navigate to: %s' % Trakt['oauth'].authorize_url(auth_url))
@@ -28,8 +25,8 @@ class TraktAuthenticator(object):
         if not code:
             exit(1)
 
-        authorization = Trakt['oauth'].token_exchange(code, auth_url)
-        if not authorization:
+        self.authorization = Trakt['oauth'].token_exchange(code, auth_url)
+        if not self.authorization:
             exit(1)
 
-        return authorization
+        return self.authorization

@@ -14,3 +14,4 @@ class AddCommand(object):
         """
         @type message: discord.Message
         """
+        self.movie_manager.add_movie(message)

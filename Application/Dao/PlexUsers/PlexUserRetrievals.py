@@ -12,6 +12,17 @@ def get_users(connection):
     return get_records_as_users(cursor)
 
 
+def get_user_by_discord_id(connection, discord_id):
+    """
+    @type connection: Connection
+    """
+    cursor = connection.cursor()
+    cursor.execute('''SELECT *
+                      FROM PLEX_USERS
+                      WHERE discord_id = ?''', (discord_id,))
+    return get_records_as_users(cursor)
+
+
 def get_admin_users(connection):
     """
     @type connection: Connection
