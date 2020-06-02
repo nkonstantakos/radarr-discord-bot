@@ -9,11 +9,7 @@ import configparser
 
 
 class BotManager(object):
-    def __init__(self, bot, config):
-        """
-        @type bot: discord.Client
-        @type config: configparser.ConfigParser
-        """
+    def __init__(self, bot: discord.Client, config: configparser.ConfigParser):
         self.bot = bot
         self.movie_manager = MovieManager(config)
         self.addCommand = AddCommand(self.bot, self.movie_manager)
@@ -22,12 +18,9 @@ class BotManager(object):
         self.printCommand = PrintCommand(self.bot, self.movie_manager)
         self.voteCommand = VoteCommand(self.bot, self.movie_manager)
 
-    def process_message(self, message):
-        """
-        @type message: discord.Message
-        """
+    async def process_message(self, message: discord.Message):
         if message.content.startswith("!addMovie"):
-            self.addCommand.add_movie(message)
+            await self.addCommand.add_movie(message)
         elif message.content.startswith("!approveMovie"):
             self.approveCommand.approve_movie()
         elif message.content.startswith("!approveAllMovies"):

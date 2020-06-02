@@ -1,16 +1,11 @@
 from Application.Api.MovieManager import MovieManager
+from Application.Bot.Commands.BotCommandBase import BotCommandBase
+import discord
 
 
-class AuthenticateCommand(object):
-    def __init__(self, bot, movie_manager):
-        """
-        @type bot: Connection
-        @type movie_manager: MovieManager
-        """
-        self.bot = bot
-        self.movie_manager = movie_manager
+class AuthenticateCommand(BotCommandBase):
+    def __init__(self, bot: discord.connection, movie_manager: MovieManager):
+        super(self, AuthenticateCommand).__init__(self, bot, movie_manager)
 
-    def authenticate(self, message):
-        """
-        @type message: discord.Message
-        """
+    def authenticate(self, message: discord.Message):
+        print('Authenticate')

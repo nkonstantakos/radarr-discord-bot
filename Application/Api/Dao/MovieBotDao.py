@@ -1,10 +1,8 @@
-from Application.Dao.Movies import MovieTable
-from Application.Dao.Movies import MovieUpserts
-from Application.Dao.PlexUsers import PlexUserTable
-from Application.Dao.Votes import VoteTable
-from Application.Domain.Movie import Movie
-from Application.Dao.PlexUsers import PlexUserRetrievals
-from Application.Dao.PlexUsers import PlexUserUpserts
+from Application.Api.Dao.Movies import MovieTable, MovieUpserts, MovieRetrievals, MovieDTO
+from Application.Api.Dao.Votes import VoteTable
+from Application.Api.Domain.Movie import Movie
+from Application.Api.Domain.PlexUser import PlexUser
+from Application.Api.Dao.PlexUsers import PlexUserRetrievals, PlexUserTable, PlexUserUpserts
 import sqlite3
 
 
@@ -25,7 +23,7 @@ class MovieBotDao(object):
     def get_all_users(self):
         connection = self.get_db_connection()
         existing_users = PlexUserRetrievals.get_users(connection)
-        commit_and_close()
+        connection.close()
         return existing_users
 
     def insert_user(self, user):
@@ -37,14 +35,31 @@ class MovieBotDao(object):
     def get_user_by_discord_id(self, discord_id):
         connection = self.get_db_connection()
         user = PlexUserRetrievals.get_user_by_discord_id(connection, discord_id)
-        if len(user) > 0:
-            return user[0]
-        return None
+        connection.close()
+        return get_first_record_or_return(user)
+
+    def get_user_by_user_id(self, user_id):
+        connection = self.get_db_connection()
+        user = PlexUserRetrievals.get_user_by_user_id(connection, user_id)
+        connection.close()
+        return get_first_record_or_return(user)
 
     def insert_movie(self, movie: Movie):
         connection = self.get_db_connection()
         MovieUpserts.insert_movie(connection, movie)
-        commit_and_close(connection)
+        connection.commit()
+        new_movie: Movie = self.get_movie(movie.imdb_id)
+        connection.close()
+        return new_movie
+
+    def get_movie(self, imdb_id: str):
+        connection = self.get_db_connection()
+        movie: MovieDTO = MovieRetrievals.get_movie_by_imdb_id(connection, imdb_id)
+        if movie is not None:
+            user: PlexUser = self.get_user_by_user_id(movie.creator_id)
+            movie.creator = user
+        connection.close()
+        return movie
 
     def get_db_connection(self):
         return sqlite3.connect(self.db_name)
@@ -54,3 +69,8 @@ def commit_and_close(connection):
     connection.commit()
     connection.close()
 
+
+def get_first_record_or_return(record_list):
+    if len(record_list) > 0:
+        return record_list[0]
+    return None

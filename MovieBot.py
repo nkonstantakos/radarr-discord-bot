@@ -6,7 +6,7 @@ from Application.Bot.BotManager import BotManager
 config = configparser.ConfigParser()
 config.read('properties.ini')
 bot = discord.Client()
-manager = BotManager(bot, config)
+manager: BotManager = BotManager(bot, config)
 
 
 def run():
@@ -31,7 +31,7 @@ async def on_message(message):
     if str(message.author) == bot.user:
         return
     elif message.content.startswith("!"):
-        manager.process_message(message)
+        await manager.process_message(message)
 
 if __name__ == "__main__":
     run()

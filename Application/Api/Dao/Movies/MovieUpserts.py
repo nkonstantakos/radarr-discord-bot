@@ -1,4 +1,4 @@
-from Application.Domain.Movie import Movie
+from Application.Api.Domain.Movie import Movie
 from sqlite3 import Connection
 
 
@@ -11,7 +11,7 @@ def insert_movie(connection, movie):
                        'VALUES (?, ?, ?, ?, ?, ?, ?)',
                        (movie.imdb_id,
                         movie.movie_name,
-                        movie.creator,
+                        movie.creator.user_id,
                         int(movie.approved),
                         int(movie.declined),
                         int(movie.deleted),

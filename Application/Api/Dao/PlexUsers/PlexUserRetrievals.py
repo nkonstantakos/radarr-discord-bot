@@ -1,4 +1,4 @@
-from Application.Domain.PlexUser import PlexUser
+from Application.Api.Domain.PlexUser import PlexUser
 from sqlite3 import Connection
 from sqlite3 import Cursor
 
@@ -18,6 +18,14 @@ def get_user_by_discord_id(connection: Connection, discord_id: int):
     cursor.execute('''SELECT *
                       FROM PLEX_USERS
                       WHERE discord_id = ?''', (discord_id,))
+    return get_records_as_users(cursor)
+
+
+def get_user_by_user_id(connection: Connection, user_id: int):
+    cursor = connection.cursor()
+    cursor.execute('''SELECT *
+                      FROM PLEX_USERS
+                      WHERE user_id = ?''', (user_id,))
     return get_records_as_users(cursor)
 
 

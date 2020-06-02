@@ -7,7 +7,7 @@ def create_movie_table(connection):
     """
     connection.execute('''CREATE TABLE IF NOT EXISTS MOVIES
                          (movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                         imdb_id INTEGER,
+                         imdb_id TEXT,
                          movie_name TEXT,
                          creator INTEGER,
                          approved INTEGER,

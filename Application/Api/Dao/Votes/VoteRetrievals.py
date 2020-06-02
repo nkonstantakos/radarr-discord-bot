@@ -1,5 +1,4 @@
-from Application.Domain.Movie import Movie
-from Application.Domain.Vote import Vote
+from Application.Api.Domain.Vote import Vote
 from sqlite3 import Connection
 
 

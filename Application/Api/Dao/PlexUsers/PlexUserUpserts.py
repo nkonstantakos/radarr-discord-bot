@@ -1,4 +1,4 @@
-from Application.Domain.PlexUser import PlexUser
+from Application.Api.Domain.PlexUser import PlexUser
 from sqlite3 import Connection
 
 

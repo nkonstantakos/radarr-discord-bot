@@ -1,3 +1,6 @@
+from Application.Api.Domain.PlexUser import PlexUser
+
+
 class Movie(object):
     def __init__(self,
                  movie_id,
@@ -11,7 +14,7 @@ class Movie(object):
         self.movie_id: int = movie_id
         self.imdb_id: str = imdb_id
         self.movie_name: str = movie_name
-        self.creator: int = creator
+        self.creator: PlexUser = creator
         self.approved: bool = approved
         self.declined: bool = declined
         self.deleted: bool = deleted
