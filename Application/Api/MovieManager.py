@@ -9,8 +9,8 @@ class MovieManager(object):
         self.dao.create_tables()
         self.add_movie_function = AddMovieFunction(self.config, self.dao)
 
-    def add_movie(self, imdb_id, creator_id, creator_name, is_private):
-        return self.add_movie_function.add_movie(creator_id, creator_name, imdb_id, is_private)
+    def add_movie(self, imdb_id, movie_name, creator_id, creator_name, is_private):
+        return self.add_movie_function.add_movie(imdb_id, movie_name, creator_id, creator_name, is_private)
 
     def approve_movie(self, message):
         print('Approve Movie')

@@ -1,11 +1,13 @@
 from Application.Api.MovieManager import MovieManager
+from Application.Trakt.TraktManager import TraktManager
 import discord
 
 
 class BotCommandBase(object):
-    def __init__(self, bot, movie_manager):
+    def __init__(self, bot: discord.Client, movie_manager: MovieManager, trakt_manager: TraktManager):
         self.bot: discord.Client = bot
         self.movie_manager: MovieManager = movie_manager
+        self.trakt_manager = trakt_manager
         self.IMDB_BASE_URL = 'https://www.imdb.com/title/'
 
     def get_imdb_id_from_message(self, message: discord.Message):
@@ -16,7 +18,6 @@ class BotCommandBase(object):
             imdb_id = url_part.split('/')[0]
         return imdb_id
 
-
-def is_private(message: discord.Message):
-    return message.channel.type[0] == 'private'
+    def is_private(self, message: discord.Message):
+        return message.channel.type[0] == 'private'
 

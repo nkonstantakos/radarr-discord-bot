@@ -1,11 +1,12 @@
 from Application.Api.MovieManager import MovieManager
+from Application.Trakt.TraktManager import TraktManager
 from Application.Bot.Commands.BotCommandBase import BotCommandBase
 import discord
 
 
 class ApproveCommand(BotCommandBase):
-    def __init__(self, bot: discord.connection, movie_manager: MovieManager):
-        super(self, ApproveCommand).__init__(self, bot, movie_manager)
+    def __init__(self, bot: discord.Client, movie_manager: MovieManager, trakt_manager: TraktManager):
+        super().__init__(bot, movie_manager, trakt_manager)
 
     def approve_movie(self, message: discord.Message):
         if message.content.startswith("!approveMovie"):

@@ -4,6 +4,7 @@ from Application.Bot.Commands.ApproveCommand import ApproveCommand
 from Application.Bot.Commands.AuthenticateCommand import AuthenticateCommand
 from Application.Bot.Commands.PrintCommand import PrintCommand
 from Application.Bot.Commands.VoteCommand import VoteCommand
+from Application.Trakt.TraktManager import TraktManager
 import discord
 import configparser
 
@@ -12,11 +13,12 @@ class BotManager(object):
     def __init__(self, bot: discord.Client, config: configparser.ConfigParser):
         self.bot = bot
         self.movie_manager = MovieManager(config)
-        self.addCommand = AddCommand(self.bot, self.movie_manager)
-        self.approveCommand = ApproveCommand(self.bot, self.movie_manager)
-        self.authenticateCommand = AuthenticateCommand(self.bot, self.movie_manager)
-        self.printCommand = PrintCommand(self.bot, self.movie_manager)
-        self.voteCommand = VoteCommand(self.bot, self.movie_manager)
+        self.trakt_manager = TraktManager(config)
+        self.addCommand = AddCommand(self.bot, self.movie_manager, self.trakt_manager)
+        self.approveCommand = ApproveCommand(self.bot, self.movie_manager, self.trakt_manager)
+        self.authenticateCommand = AuthenticateCommand(self.bot, self.movie_manager, self.trakt_manager)
+        self.printCommand = PrintCommand(self.bot, self.movie_manager, self.trakt_manager)
+        self.voteCommand = VoteCommand(self.bot, self.movie_manager, self.trakt_manager)
 
     async def process_message(self, message: discord.Message):
         if message.content.startswith("!addMovie"):
@@ -27,3 +29,7 @@ class BotManager(object):
             self.approveCommand.approve_movie()
         elif message.content.startswith("!removeMovie"):
             self.movie_manager.remove_move(message)
+        elif message.content.startswith("!auth"):
+            self.authenticateCommand.authenticate(message)
+        elif message.content.startswith("!test"):
+            print("nothin to test")

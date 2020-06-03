@@ -10,6 +10,8 @@ class MovieDTO(Movie):
                  declined,
                  deleted,
                  private,
-                 creator_id):
-        super(MovieDTO, self).__init__(movie_id, imdb_id, movie_name, None, approved, declined, deleted, private)
+                 creator_id,
+                 channel_id,
+                 trakt_id):
+        super(MovieDTO, self).__init__(movie_id, imdb_id, movie_name, None, approved, declined, deleted, private, channel_id, trakt_id)
         self.creator_id = creator_id
