@@ -133,6 +133,7 @@ dmypy.json
 
 # properties
 *.ini
+*.pkl
 
 # sqlite db's
 *.db
