@@ -15,19 +15,19 @@ class AddCommand(BotCommandBase):
             imdb_id = self.get_imdb_id_from_message(message)
             private = self.is_private(message)
             search_results = self.trakt_manager.search_movie(imdb_id)
-            if len(search_results) > 0:
+            if search_results is not None and len(search_results) > 0:
                 movie_name = search_results[0].title
             else:
                 channel: discord.GroupChannel = self.bot.get_channel(message.channel.id)
                 await channel.send('Sorry, couldn\'t find that movie, check that the url is valid')
                 return
-            movie: Movie = self.movie_manager.add_movie(imdb_id, movie_name, message.author.id,
-                                                        message.author.name, private)
-            url = self.IMDB_BASE_URL + imdb_id
+            trakt_id = self.get_trakt_id(search_results[0])
+            movie: Movie = self.movie_manager.add_movie(imdb_id, trakt_id, movie_name, message.author.id,
+                                                        message.author.name, private, message.channel.id)
             channel: discord.GroupChannel = self.bot.get_channel(message.channel.id)
-            self.trakt_manager.add_movie(movie)
             await channel.send('Thanks ' + message.author.name + '! I\'ve added '
-                               + movie.movie_name + ' to the list.\n' + url)
+                               + movie.movie_name + ' to the list.')
         except MovieExistsException as e:
             channel: discord.GroupChannel = self.bot.get_channel(message.channel.id)
-            await channel.send('Hmm sorry looks like someone has already added that movie. (' + e.imdb_id + ')')
+            # count this as a vote if not deleted, declined or approved
+            await channel.send('No need to add \'' + e.movie_name + '\', ' + e.creator_name + ' already added it!')

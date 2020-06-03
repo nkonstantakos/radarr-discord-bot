@@ -23,10 +23,7 @@ async def on_ready():
 
 
 @bot.event
-async def on_message(message):
-    """
-    @type message: discord.Message
-    """
+async def on_message(message: discord.Message):
     global manager
     if str(message.author) == bot.user:
         return

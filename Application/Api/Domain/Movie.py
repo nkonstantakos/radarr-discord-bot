@@ -1,4 +1,6 @@
 from Application.Api.Domain.PlexUser import PlexUser
+from Application.Api.Domain.Vote import Vote
+from typing import List
 
 
 class Movie(object):
@@ -11,8 +13,9 @@ class Movie(object):
                  declined: bool,
                  deleted: bool,
                  private: bool,
-                 channel_id: str,
-                 trakt_id: str):
+                 channel_id: int,
+                 trakt_id: int,
+                 votes: List[Vote]):
         self.movie_id: int = movie_id
         self.imdb_id: str = imdb_id
         self.movie_name: str = movie_name
@@ -21,5 +24,6 @@ class Movie(object):
         self.declined: bool = declined
         self.deleted: bool = deleted
         self.private: bool = private
-        self.channel_id: str = channel_id
-        self.trakt_id: str = trakt_id
+        self.channel_id: int = channel_id
+        self.trakt_id: int = trakt_id
+        self.votes: List[Vote] = votes

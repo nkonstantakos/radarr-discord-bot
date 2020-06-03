@@ -14,4 +14,6 @@ def create_movie_table(connection):
                          declined INTEGER,
                          deleted INTEGER,
                          private INTEGER,
-                         FOREIGN KEY(creator) REFERENCES USER (user_id))''')
+                         channel_id INTEGER,
+                         trakt_id INTEGER,
+                         FOREIGN KEY(creator) REFERENCES PLEX_USERS (user_id))''')

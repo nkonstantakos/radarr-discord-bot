@@ -16,9 +16,6 @@ class TraktAuthenticator(object):
         )
 
     def authenticate(self, pin: str):
-        if self.authorization:
-            return json.loads(self.authorization)
-
         auth_url = self.config['TRAKT']['authUrl']
 
         if not pin:

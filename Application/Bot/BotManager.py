@@ -32,4 +32,9 @@ class BotManager(object):
         elif message.content.startswith("!auth"):
             self.authenticateCommand.authenticate(message)
         elif message.content.startswith("!test"):
+            search_results = self.trakt_manager.search_movie('tt6193424')
+            print(search_results[0].keys)
+            for tup in search_results[0].keys:
+                if tup[0] == 'trakt':
+                    print(tup[1])
             print("nothin to test")
