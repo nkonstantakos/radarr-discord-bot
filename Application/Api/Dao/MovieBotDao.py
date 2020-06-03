@@ -1,4 +1,5 @@
-from Application.Api.Dao.Movies import MovieTable, MovieUpserts, MovieRetrievals, MovieDTO
+from Application.Api.Dao.Movies import MovieTable, MovieUpserts, MovieRetrievals
+from Application.Api.Dao.Movies.MovieDTO import MovieDTO
 from Application.Api.Dao.Votes import VoteTable, VoteRetrievals
 from Application.Api.Domain.Movie import Movie
 from Application.Api.Domain.PlexUser import PlexUser
@@ -40,9 +41,9 @@ class MovieBotDao(object):
         connection.close()
         return get_first_record_or_return(user)
 
-    def get_user_by_user_id(self, user_id):
+    def get_users_by_user_ids(self, user_ids: List[int]):
         connection = self.get_db_connection()
-        user = PlexUserRetrievals.get_user_by_user_id(connection, user_id)
+        user = PlexUserRetrievals.get_users_by_user_ids(connection, user_ids)
         connection.close()
         return get_first_record_or_return(user)
 
@@ -54,32 +55,47 @@ class MovieBotDao(object):
         connection.close()
         return new_movie
 
-    def get_votes_by_movie_id(self, movie_id):
+    def get_votes_by_movie_ids(self, movie_ids: List[int]):
         connection = self.get_db_connection()
-        votes = VoteRetrievals.get_votes_for_movie(connection, movie_id)
+        votes = VoteRetrievals.get_votes_for_movies(connection, movie_ids)
         connection.close()
         return votes if len(votes) > 0 else None
 
-    def get_movie(self, movie_id: str = None, imdb_id: str = None):
+    def get_movie(self, movie_id: int = None, imdb_id: str = None):
         connection = self.get_db_connection()
         if movie_id is not None:
-            movie_record: MovieDTO = MovieRetrievals.get_movie_by_imdb_id(connection, imdb_id)
+            movie_records: List[MovieDTO] = MovieRetrievals.get_movie_by_imdb_id(connection, imdb_id)
         elif imdb_id is not None:
-            movie_record: MovieDTO = MovieRetrievals.get_movie_by_imdb_id(connection, imdb_id)
+            movie_records: List[MovieDTO] = MovieRetrievals.get_movie_by_imdb_id(connection, imdb_id)
         else:
             print('Raise exception!')
             return
-        movie = self.populate_movie_details(movie_record)
+        movies = self.populate_movie_details(movie_records)
+        connection.close()
+        return movies[0] if movies is not None else None
+
+    def get_movies(self, channel_id: int = None):
+        connection = self.get_db_connection()
+        if channel_id is not None:
+            movie_records: List[MovieDTO] = MovieRetrievals.get_all_movies_by_channel(connection, channel_id)
+        else:
+            print('Raise exception!')
+            return
+        movie = self.populate_movie_details(movie_records)
         connection.close()
         return movie
 
-    def populate_movie_details(self, movie: Movie):
-        if movie is not None:
-            user: PlexUser = self.get_user_by_user_id(movie.creator_id)
-            votes: List[Vote] = self.get_votes_by_movie_id(movie.movie_id)
-            movie.creator = user
-            movie.votes = votes
-        return movie
+    def populate_movie_details(self, movies: List[MovieDTO]):
+        if movies is not None and len(movies) > 0:
+            for movie in movies:
+                if movie is not None:
+                    user: PlexUser = self.get_users_by_user_ids([movie.creator_id])
+                    votes: List[Vote] = self.get_votes_by_movie_ids([movie.movie_id])
+                    movie.creator = user
+                    movie.votes = votes
+        else:
+            return None
+        return movies
 
     def get_db_connection(self):
         return sqlite3.connect(self.db_name)

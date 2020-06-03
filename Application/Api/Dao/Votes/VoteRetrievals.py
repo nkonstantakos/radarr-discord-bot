@@ -1,12 +1,13 @@
+from typing import List
 from Application.Api.Domain.Vote import Vote
 from sqlite3 import Connection, Cursor
 
 
-def get_votes_for_movie(connection: Connection, movie_id: int):
+def get_votes_for_movies(connection: Connection, movie_ids: List[int]):
     cursor = connection.cursor()
     cursor.execute('''SELECT *
                       FROM VOTES
-                      WHERE movie_id = ?''', (movie_id,))
+                      WHERE movie_id IN ({sequence})'''.format(sequence=','.join(['?']*len(movie_ids))), movie_ids)
     return get_records_as_votes(cursor)
 
 

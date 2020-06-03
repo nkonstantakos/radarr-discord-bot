@@ -18,12 +18,13 @@ class AddMovieFunction(object):
 
         self.check_movie_exists(imdb_id)
         approved: bool = user_record.admin or user_record.moderator
-        new_movie: Movie = Movie(None, imdb_id, movie_name, user_record, approved, False, False, private, channel_id, trakt_id, None)
+        new_movie: Movie = Movie(None, imdb_id, movie_name, user_record, approved, False, False, private, channel_id,
+                                 trakt_id, None)
         inserted_movie: Movie = self.dao.insert_movie(new_movie)
         return inserted_movie
 
     def check_movie_exists(self, imdb_id: str):
-        existing_movie = self.dao.get_movie(imdb_id)
+        existing_movie = self.dao.get_movie(imdb_id=imdb_id)
         if existing_movie is not None:
             raise MovieExistsException(existing_movie.movie_name, existing_movie.creator.nickname)
 

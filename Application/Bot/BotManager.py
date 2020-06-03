@@ -24,13 +24,15 @@ class BotManager(object):
         if message.content.startswith("!addMovie"):
             await self.addCommand.add_movie(message)
         elif message.content.startswith("!approveMovie"):
-            self.approveCommand.approve_movie()
+            await self.approveCommand.approve_movie(message)
         elif message.content.startswith("!approveAllMovies"):
-            self.approveCommand.approve_movie()
+            await self.approveCommand.approve_movie(message)
+        elif message.content.startswith("!print"):
+            await self.printCommand.print(message)
         elif message.content.startswith("!removeMovie"):
-            self.movie_manager.remove_move(message)
+            await self.movie_manager.remove_move(message)
         elif message.content.startswith("!auth"):
-            self.authenticateCommand.authenticate(message)
+            await self.authenticateCommand.authenticate(message)
         elif message.content.startswith("!test"):
             search_results = self.trakt_manager.search_movie('tt6193424')
             print(search_results[0].keys)

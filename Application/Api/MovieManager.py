@@ -16,6 +16,9 @@ class MovieManager(object):
     def get_movie(self, movie_id: int = None, imdb_id: str = None):
         return self.dao.get_movie(movie_id=movie_id, imdb_id=imdb_id)
 
+    def get_movies(self, channel_id: int = None):
+        return self.dao.get_movies(channel_id=channel_id)
+
     def get_user(self, discord_id: int):
         return self.dao.get_user_by_discord_id(discord_id)
 

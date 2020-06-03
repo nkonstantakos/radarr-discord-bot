@@ -10,13 +10,21 @@ def get_all_movies(connection: Connection):
     return get_records_as_movies(cursor)
 
 
+def get_all_movies_by_channel(connection: Connection, channel_id: int):
+    cursor = connection.cursor()
+    cursor.execute('''SELECT *
+                      FROM MOVIES
+                      WHERE channel_id = ?''', (channel_id,))
+    return get_records_as_movies(cursor)
+
+
 def get_movie_by_imdb_id(connection: Connection, imdb_id: str):
     cursor = connection.cursor()
     cursor.execute('''SELECT *
                       FROM MOVIES
                       WHERE imdb_id LIKE ?''', (imdb_id,))
     movie_records = get_records_as_movies(cursor)
-    return movie_records[0] if len(movie_records) > 0 else None
+    return movie_records
 
 
 def get_movie_by_movie_id(connection: Connection, movie_id: int):
@@ -25,7 +33,7 @@ def get_movie_by_movie_id(connection: Connection, movie_id: int):
                       FROM MOVIES
                       WHERE movie_id = ?''', (movie_id,))
     movie_records = get_records_as_movies(cursor)
-    return movie_records[0] if len(movie_records) > 0 else None
+    return movie_records
 
 
 def get_all_movies_pending_approval_for_channel(connection: Connection, channel_id: int):
